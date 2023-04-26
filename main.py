@@ -13,7 +13,7 @@ Builder.load_file('frontend.kv')
 class FirstScreen(Screen):
 
     def search_image(self):
-        self.manager.current_screen.ids.img.source = 'files/laptop.jpg'
+        pass
 
 
 class RootWidget(ScreenManager):
