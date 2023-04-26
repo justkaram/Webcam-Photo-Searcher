@@ -8,6 +8,8 @@
             size_hint_y: 0.8
 
         TextInput:
+            id: txt_input
+            hint_text: 'type a specific text, E.g. : Beach'
             size_hint_y: 0.1
         Button:
             size_hint_y: 0.1
@@ -18,3 +20,16 @@
     FirstScreen:
         id: first_screen
         name: 'first_screen'
+
+<MyPopup@Popup>:
+    id: alert
+    size_hint: 0.5, 0.5
+    title: 'Alert'
+    auto_dismiss: False
+
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'This is an alert message.'
+        Button:
+            text: 'Dismiss'
