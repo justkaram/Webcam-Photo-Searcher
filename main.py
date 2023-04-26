@@ -1,3 +1,4 @@
+import os
 import time
 
 from kivy.app import App
@@ -16,31 +17,38 @@ Builder.load_file('frontend.kv')
 
 class FirstScreen(Screen):
 
-    def search_image(self):
-
+    def get_image_link(self):
         # Get user query from TextInput
         query = self.manager.current_screen.ids.txt_input.text
 
         # Get an image matching the query using wikipedia lib
+        page = wikipedia.page(query)
+        link = page.images[0]
+        return link
+
+    def download_image(self):
+        # Setting headers
         headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
                           '(KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.58',
         }
         try:
             # Get the image link
-            page = wikipedia.page(query)
-            link = page.images[0]
-            r = requests.get(link, headers=headers)
+            r = requests.get(self.get_image_link(), headers=headers)
+            image_path = 'files/image.jpg'
 
             # Save the image in the same directory
-            with open(f'files/{query}.jpg', 'wb') as f:
+            with open(image_path, 'wb') as f:
                 f.write(r.content)
-
-            time.sleep(2)
-            # Set the FirstScreen image to the downloaded image
-            self.manager.current_screen.ids.img.source = f'files/{query}.jpg'
         except wikipedia.exceptions.DisambiguationError:
             return 'Try being more specific'
+        return image_path
+
+    def set_image(self):
+        # Set the FirstScreen image to the downloaded image
+        path = self.download_image()
+        self.manager.current_screen.ids.img.source = path
+        os.remove(path)
 
 
 class RootWidget(ScreenManager):
